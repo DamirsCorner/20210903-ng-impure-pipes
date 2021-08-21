@@ -6,7 +6,21 @@ import { ValueWithUnit } from './models';
   pure: false,
 })
 export class FormatValuePipe implements PipeTransform {
+  private formattedValue: string = '';
+  private latestValue: number | undefined;
+  private latestUnit: string | undefined;
+
   transform(value: ValueWithUnit): string {
-    return `${value.value} ${value.unit}`;
+    if (this.latestValue == value.value && this.latestUnit == value.unit) {
+      console.log('cached');
+      return this.formattedValue;
+    }
+
+    this.latestValue = value.value;
+    this.latestUnit = value.unit;
+    this.formattedValue = `${value.value} ${value.unit}`;
+
+    console.log('changed');
+    return this.formattedValue;
   }
 }
